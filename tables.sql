@@ -1,3 +1,11 @@
+DROP TABLE IF EXISTS board;
+DROP TABLE IF EXISTS hand;
+DROP TABLE IF EXISTS card_in_deck;
+DROP TABLE IF EXISTS card_copy;
+DROP TABLE IF EXISTS card; 
+DROP TABLE IF EXISTS deck; 
+DROP TABLE IF EXISTS game;
+DROP TABLE IF EXISTS user; 
 CREATE TABLE user( 
 
 	user_id int AUTO_INCREMENT, #id of user
@@ -15,7 +23,7 @@ CREATE TABLE game(
 	second_id int NOT NULL, #id of the player going second
 	turn_timer datetime NULL, #ends turn after 1 min 30
 	turn int(1) NOT NULL, #whos turn it is. 0 for first id and 1 for second id
-	PRIMARY KEY(gameId),
+	PRIMARY KEY(game_id),
 	FOREIGN KEY(first_id) REFERENCES user(user_id)
 	ON DELETE CASCADE
 
@@ -26,7 +34,7 @@ CREATE TABLE deck(
 	deck_id int AUTO_INCREMENT, #id of deck
 	user_id int NOT NULL, #id of user that the deck belongs to 
 	game_id int NOT NULL, #id of game that the deck belongs to 
-	PRIMARY KEY(deck_id)
+	PRIMARY KEY(deck_id),
 	FOREIGN KEY(user_id) REFERENCES user(user_id)
 	ON DELETE CASCADE
 
@@ -59,7 +67,8 @@ CREATE TABLE card_copy(
 	on_death text NULL, #modified code when card dies
 	on_alive text NULL, #modified code when card on board
 	asleep int(1) NULL, #whether the card can attack. asleep = 0, ready = 1
-	FOREIGN KEY(card_id) REFERENCES cards(card_id)
+	PRIMARY KEY(card_id),
+	FOREIGN KEY(card_id) REFERENCES card(card_id)
 	ON DELETE CASCADE
 
 );
@@ -89,7 +98,7 @@ CREATE TABLE hand(
 	card7 int NULL,
 	card8 int NULL,
 	card9 int NULL,
-	order VARCHAR(10) NULL, #order the cards are in 
+	card_order varchar(10) NULL, #order the cards are in 
 	PRIMARY KEY(user_id, game_id),
 	FOREIGN KEY(card0) REFERENCES card(card_id),
 	FOREIGN KEY(card1) REFERENCES card(card_id),
@@ -116,7 +125,7 @@ CREATE TABLE board(
 	card4 int NULL,
 	card5 int NULL,
 	card6 int NULL,
-	order VARCHAR(7) NULL, #order the cards are in 
+	card_order varchar(7) NULL, #order the cards are in 
 	PRIMARY KEY(user_id, game_id),
 	FOREIGN KEY(card0) REFERENCES card(card_id),
 	FOREIGN KEY(card1) REFERENCES card(card_id),
